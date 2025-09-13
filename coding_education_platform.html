@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeBuddy - Learn Programming with Fun!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite;
+        }
+
+        .coding-buddy {
+            width: 100px;
+            height: 100px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            margin: 0 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .coding-buddy::before {
+            content: '👨‍💻';
+            font-size: 50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .code-editor {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .editor-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .traffic-lights {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red { background: #ff5f57; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #28ca42; }
+
+        .editor-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .code-area {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 15px;
+            color: #858585;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 0 10px;
+            user-select: none;
+        }
+
+        .code-content {
+            margin-left: 50px;
+        }
+
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+        .function { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+
+        .error-line {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff4444;
+            animation: pulse 1s infinite;
+        }
+
+        .analysis-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .analysis-buddy {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-right: 15px;
+            animation: wiggle 2s infinite;
+        }
+
+        .error-item, .suggestion-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff4444;
+            position: relative;
+        }
+
+        .suggestion-item {
+            border-left-color: #28a745;
+        }
+
+        .error-icon, .suggestion-icon {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .exercise-generator {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .tutorial-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 20px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            height: 100%;
+            width: 65%;
+            animation: progress-fill 2s ease-out;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-code {
+            position: absolute;
+            color: rgba(255,255,255,0.1);
+            font-family: monospace;
+            font-size: 20px;
+            animation: float-up 10s linear infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes progress-fill {
+            0% { width: 0%; }
+            100% { width: 65%; }
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 8px;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .tutorial-step {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 5px solid #007bff;
+            position: relative;
+        }
+
+        .tutorial-step::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            animation: sparkle 1.5s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .exercise-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .exercise-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-code" style="left: 10%; animation-delay: 0s;">console.log('Hello!');</div>
+        <div class="floating-code" style="left: 80%; animation-delay: 2s;">function magic() {}</div>
+        <div class="floating-code" style="left: 50%; animation-delay: 4s;">if (learning) { fun++; }</div>
+        <div class="floating-code" style="left: 30%; animation-delay: 6s;">for (i = 0; i < ∞; i++)</div>
+        <div class="floating-code" style="left: 70%; animation-delay: 8s;">return awesome;</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>CodeBuddy 🚀</h1>
+            <div class="coding-buddy"></div>
+            <p style="font-size: 1.2rem; margin-top: 15px;">Your Friendly Programming Learning Assistant</p>
+        </div>
+
+        <div class="main-content">
+            <div class="code-editor">
+                <div class="editor-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="editor-title">Smart Code Editor</div>
+                </div>
+                
+                <div class="code-area">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+                    <div class="code-content">
+<span class="keyword">function</span> <span class="function">calculateSum</span>(a, b) {<br>
+&nbsp;&nbsp;<span class="comment">// This function adds two numbers</span><br>
+&nbsp;&nbsp;<span class="keyword">let</span> result = a + b;<br>
+<div class="error-line">&nbsp;&nbsp;<span class="keyword">if</span> (result = <span class="number">10</span>) {</div>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">console.log</span>(<span class="string">"Perfect ten!"</span>);<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">return</span> result;<br>
+}<br>
+<br>
+<span class="function">calculateSum</span>(<span class="number">5</span>, <span class="number">5</span>);
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-panel">
+                <div class="analysis-header">
+                    <div class="analysis-buddy">🔍</div>
+                    <div>
+                        <h3>Smart Code Analysis</h3>
+                        <p>Real-time error detection & suggestions</p>
+                    </div>
+                </div>
+
+                <div class="error-item">
+                    <div class="error-icon">⚠️</div>
+                    <h4>Assignment in Condition Detected!</h4>
+                    <p><strong>Line 4:</strong> You used <span class="highlight-text">=</span> instead of <span class="highlight-text">===</span> for comparison. This assigns a value instead of comparing!</p>
+                    <p style="margin-top: 10px; color: #666;">💡 <strong>Tip:</strong> Use === for strict equality comparison</p>
+                </div>
+
+                <div class="suggestion-item">
+                    <div class="suggestion-icon">✨</div>
+                    <h4>Great Job on Comments!</h4>
+                    <p>Your code documentation is excellent! Comments help other developers understand your logic.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p style="font-size: 12px; color: #28a745;">Code Quality: 85% ↗️</p>
+                </div>
+
+                <button class="button" onclick="runAnalysis()">🔄 Re-analyze Code</button>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="exercise-generator">
+                <div class="analysis-header">
+                    <div class="analysis-buddy" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">🎯</div>
+                    <div>
+                        <h3>Practice Exercises</h3>
+                        <p>Personalized challenges based on your progress</p>
+                    </div>
+                </div>
+
+                <div class="exercise-card" onclick="generateExercise()">
+                    <h4>🌟 Functions & Conditionals</h4>
+                    <p>Practice writing functions with if-else statements</p>
+                    <p style="font-size: 12px; opacity: 0.8;">Difficulty: Beginner • Est. time: 15 min</p>
+                </div>
+
+                <div class="exercise-card" onclick="generateExercise()">
+                    <h4>🔄 Loops & Arrays</h4>
+                    <p>Master iteration with for and while loops</p>
+                    <p style="font-size: 12px; opacity: 0.8;">Difficulty: Intermediate • Est. time: 20 min</p>
+                </div>
+
+                <button class="button" onclick="generateCustomExercise()">🎲 Generate Custom Exercise</button>
+            </div>
+
+            <div class="tutorial-section">
+                <div class="analysis-header">
+                    <div class="analysis-buddy" style="background: linear-gradient(45deg, #ffa726, #ff7043);">📚</div>
+                    <div>
+                        <h3>Interactive Tutorials</h3>
+                        <p>Step-by-step learning with animations</p>
+                    </div>
+                </div>
+
+                <div class="tutorial-step">
+                    <h4>Step 1: Understanding Variables</h4>
+                    <p>Variables are like <span class="highlight-text">labeled boxes</span> that store data for later use!</p>
+                </div>
+
+                <div class="tutorial-step">
+                    <h4>Step 2: Functions are Magic! ✨</h4>
+                    <p>Functions are <span class="highlight-text">reusable code blocks</span> that perform specific tasks. Think of them as recipes!</p>
+                </div>
+
+                <div class="tutorial-step">
+                    <h4>Step 3: Debugging Detective Work 🕵️</h4>
+                    <p>Finding bugs is like solving puzzles. Look for <span class="highlight-text">clues</span> in error messages!</p>
+                </div>
+
+                <button class="button" onclick="startTutorial()">▶️ Start Interactive Tutorial</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animation and interaction functions
+        function runAnalysis() {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '🔄 Analyzing...';
+            button.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e53)';
+            
+            setTimeout(() => {
+                button.textContent = '✅ Analysis Complete!';
+                button.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                
+                // Add some sparkle effects
+                createSparkles();
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 1500);
+        }
+
+        function generateExercise() {
+            const exercises = [
+                "Create a function that checks if a number is even or odd!",
+                "Write a loop that prints numbers from 1 to 10!",
+                "Build a simple calculator with add, subtract, multiply, divide!",
+                "Create an array sorter that arranges numbers from smallest to largest!",
+                "Write a function that reverses a string!"
+            ];
+            
+            const randomExercise = exercises[Math.floor(Math.random() * exercises.length)];
+            alert(`🎯 New Challenge Generated!\n\n${randomExercise}\n\nGood luck, coding superstar! 🌟`);
+        }
+
+        function generateCustomExercise() {
+            const difficulties = ['Beginner 🌱', 'Intermediate 🚀', 'Advanced 🎓'];
+            const topics = ['Variables & Data Types', 'Functions', 'Arrays & Objects', 'Loops & Conditionals', 'DOM Manipulation'];
+            
+            const difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
+            const topic = topics[Math.floor(Math.random() * topics.length)];
+            
+            alert(`🎲 Custom Exercise Generated!\n\nTopic: ${topic}\nDifficulty: ${difficulty}\n\nGet ready to code something amazing! 💻✨`);
+        }
+
+        function startTutorial() {
+            const messages = [
+                "Welcome to CodeBuddy! 🎉",
+                "Let's learn programming step by step! 📚",
+                "Interactive tutorials make learning fun! 🌟",
+                "Ready to become a coding hero? 🦸‍♀️"
+            ];
+            
+            let i = 0;
+            const showMessage = () => {
+                if (i < messages.length) {
+                    alert(messages[i]);
+                    i++;
+                    setTimeout(showMessage, 1000);
+                } else {
+                    alert("Tutorial started! Let the coding adventure begin! 🚀");
+                }
+            };
+            
+            showMessage();
+        }
+
+        function createSparkles() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.textContent = '✨';
+                    sparkle.style.position = 'fixed';
+                    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                    sparkle.style.fontSize = '20px';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.animation = 'sparkle 2s ease-out forwards';
+                    sparkle.style.zIndex = '1000';
+                    
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => sparkle.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.exercise-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.05) rotate(1deg)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+
+        // Simulate real-time code analysis
+        setInterval(() => {
+            const errorLines = document.querySelectorAll('.error-line');
+            errorLines.forEach(line => {
+                line.style.backgroundColor = line.style.backgroundColor === 'rgba(255, 0, 0, 0.2)' ? 
+                    'rgba(255, 0, 0, 0.1)' : 'rgba(255, 0, 0, 0.2)';
+            });
+        }, 1000);
+
+        // Add floating animation to coding buddies
+        document.querySelectorAll('.analysis-buddy').forEach((buddy, index) => {
+            setInterval(() => {
+                buddy.style.transform = `translateY(${Math.sin(Date.now() * 0.001 + index) * 10}px)`;
+            }, 50);
+        });
+
+        console.log("🎉 CodeBuddy Platform Loaded! Ready to learn and have fun! 🚀");
+    </script>
+</body>
+</html>
