@@ -34,8 +34,8 @@ Predicted Final Score: **72.06**
 
 ## 📈 Model Evaluation
 
-- Mean Absolute Error (MAE): **0.70**
-- R² Score: **1.00**
+- Mean Absolute Error (MAE): **0.7**
+- R² Score: **1.0**
 
 > Note: This project uses a small sample dataset for learning and demonstration purposes. The evaluation results should not be considered real-world model accuracy.
 
