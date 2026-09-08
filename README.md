@@ -1,3 +1,13 @@
+# 🚀 CodeBuddy – Programming Learning Assistant
+
+CodeBuddy is a beginner-friendly programming learning platform designed to help students learn and practice coding.
+
+## ✨ Features
+
+- Smart Code Editor
+- Code Error Detection
+- Coding Suggestions
+
 # Student Performance Prediction using Machine Learning
 
 ## 📌 Project Overview
